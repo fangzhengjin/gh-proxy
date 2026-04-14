@@ -94,8 +94,13 @@ async function fetchHandler(e) {
             return httpHandler(req, path)
         }
     } else if (path.search(exp4) === 0) {
-        const newUrl = path.replace(/(?<=com\/.+?\/.+?)\/(.+?\/)/, '@$1').replace(/^(?:https?:\/\/)?raw\.(?:githubusercontent|github)\.com/, 'https://cdn.jsdelivr.net/gh')
-        return Response.redirect(newUrl, 302)
+        if (Config.jsdelivr) {
+            const newUrl = path.replace(/(?<=com\/.+?\/.+?)\/(.+?\/)/, '@$1').replace(/^(?:https?:\/\/)?raw\.(?:githubusercontent|github)\.com/, 'https://cdn.jsdelivr.net/gh')
+            return Response.redirect(newUrl, 302)
+        }
+        else {
+            return httpHandler(req, path)
+        }
     } else {
         return makeRes('not match', 404)
     }
