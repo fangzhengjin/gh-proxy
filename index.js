@@ -94,15 +94,10 @@ async function fetchHandler(e) {
             return httpHandler(req, path)
         }
     } else if (path.search(exp4) === 0) {
-        if (Config.jsdelivr) {
-            const newUrl = path.replace(/(?<=com\/.+?\/.+?)\/(.+?\/)/, '@$1').replace(/^(?:https?:\/\/)?raw\.(?:githubusercontent|github)\.com/, 'https://cdn.jsdelivr.net/gh')
-            return Response.redirect(newUrl, 302)
-        }
-        else {
-            return httpHandler(req, path)
-        }
+        const newUrl = path.replace(/(?<=com\/.+?\/.+?)\/(.+?\/)/, '@$1').replace(/^(?:https?:\/\/)?raw\.(?:githubusercontent|github)\.com/, 'https://cdn.jsdelivr.net/gh')
+        return Response.redirect(newUrl, 302)
     } else {
-        return fetch(ASSET_URL + path)
+        return makeRes('not match', 404)
     }
 }
 
@@ -183,4 +178,3 @@ async function proxy(urlObj, reqInit) {
         headers: resHdrNew,
     })
 }
-
